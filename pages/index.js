@@ -1,43 +1,31 @@
-import Container from '../components/container'
-import MoreStories from '../components/more-stories'
-import HeroPost from '../components/hero-post'
-import Intro from '../components/intro'
-import Layout from '../components/layout'
-import { getAllPostsForHome } from '../lib/api'
+import { getAllCards } from '../lib/api'
 import Head from 'next/head'
 import { CMS_NAME } from '../lib/constants'
+import Banner from '../components/Banner'
+import Navbar from '../components/Navbar'
+import Hero from '../components/Hero'
+import Cards from '../components/Cards'
+import { useState } from 'react'
 
-export default function Index({ preview, allPosts }) {
-  const heroPost = allPosts[0]
-  const morePosts = allPosts.slice(1)
+export default function Index({ allCards }) {
+  const [filter, setFilter] = useState(null)
+  const cards = filter ? allCards.filter(item => item.title.includes(filter)) : allCards
   return (
     <>
-      <Layout preview={preview}>
-        <Head>
-          <title>Next.js Blog Example with {CMS_NAME}</title>
-        </Head>
-        <Container>
-          <Intro />
-          {heroPost && (
-            <HeroPost
-              title={heroPost.title}
-              coverImage={heroPost.coverImage}
-              date={heroPost.date}
-              author={heroPost.author}
-              slug={heroPost.slug}
-              excerpt={heroPost.excerpt}
-            />
-          )}
-          {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-        </Container>
-      </Layout>
+      <Head>
+        <title>Axelar challenge with {CMS_NAME}</title>
+      </Head>
+      <Banner />
+      <Navbar />
+      <Hero setFilter={setFilter} />
+      <Cards data={cards} />
     </>
   )
 }
 
-export async function getStaticProps({ preview = false }) {
-  const allPosts = (await getAllPostsForHome(preview)) ?? []
+export async function getStaticProps() {
+  const allCards = await getAllCards()
   return {
-    props: { preview, allPosts },
+    props: { allCards },
   }
 }

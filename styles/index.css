@@ -1,5 +1,16 @@
-/* purgecss start ignore */
 @tailwind base;
 @tailwind components;
-/* purgecss end ignore */
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-900;
+    @apply font-circular;
+    @apply text-white;
+  }
+}
+
+@font-face {
+  font-family: "Circular";
+  src: url("../public/font/CircularStd-Medium.otf");
+}
